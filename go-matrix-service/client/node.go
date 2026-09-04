@@ -21,9 +21,11 @@ type analysisRequest struct {
 }
 
 func (h *HTTPClient) Analyze(ctx context.Context, qr services.QRResult, token string) (interface{}, error) {
-	payload, err := json.Marshal(analysisRequest{
-		Matrices: []services.Matrix{qr.Q, qr.R},
-	})
+	return h.AnalyzeMatrices(ctx, []services.Matrix{qr.Q, qr.R}, token)
+}
+
+func (h *HTTPClient) AnalyzeMatrices(ctx context.Context, matrices []services.Matrix, token string) (interface{}, error) {
+	payload, err := json.Marshal(analysisRequest{Matrices: matrices})
 	if err != nil {
 		return nil, fmt.Errorf("marshal analysis payload: %w", err)
 	}

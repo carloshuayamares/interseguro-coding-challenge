@@ -25,6 +25,7 @@ func main() {
 	app := fiber.New(fiber.Config{DisableStartupMessage: true})
 	app.Use(middleware.JWT(jwtSecret))
 	app.Post("/api/v1/matrix/process", matrixHandler.Process)
+	app.Post("/api/v1/matrix/rotate", matrixHandler.Rotate)
 
 	log.Printf("matrix service listening on :%s", port)
 	if err := app.Listen(":" + port); err != nil {

@@ -28,6 +28,10 @@ type Analyzer interface {
 	Analyze(context.Context, QRResult, string) (interface{}, error)
 }
 
+type MatrixAnalyzer interface {
+	AnalyzeMatrices(context.Context, []Matrix, string) (interface{}, error)
+}
+
 type MatrixService struct {
 	analyzer Analyzer
 }
@@ -51,6 +55,35 @@ func (s *MatrixService) Process(ctx context.Context, input Matrix, token string)
 		return QRResult{}, nil, fmt.Errorf("node analysis: %w", err)
 	}
 	return result, analysis, nil
+}
+
+func (s *MatrixService) Rotate(ctx context.Context, input Matrix, token string) (Matrix, interface{}, error) {
+	if err := ValidateMatrix(input); err != nil {
+		return nil, nil, err
+	}
+
+	rotated := RotateClockwise(input)
+	analyzer, ok := s.analyzer.(MatrixAnalyzer)
+	if !ok {
+		return nil, nil, errors.New("configured analyzer does not support matrix analysis")
+	}
+	analysis, err := analyzer.AnalyzeMatrices(ctx, []Matrix{rotated}, token)
+	if err != nil {
+		return nil, nil, fmt.Errorf("node analysis: %w", err)
+	}
+	return rotated, analysis, nil
+}
+
+func RotateClockwise(input Matrix) Matrix {
+	rows, columns := len(input), len(input[0])
+	rotated := make(Matrix, columns)
+	for row := range rotated {
+		rotated[row] = make([]float64, rows)
+		for column := 0; column < rows; column++ {
+			rotated[row][column] = input[rows-1-column][row]
+		}
+	}
+	return rotated
 }
 
 func ValidateMatrix(input Matrix) error {

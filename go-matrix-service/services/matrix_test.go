@@ -12,6 +12,10 @@ func (analyzerStub) Analyze(context.Context, QRResult, string) (interface{}, err
 	return map[string]string{"status": "ok"}, nil
 }
 
+func (analyzerStub) AnalyzeMatrices(context.Context, []Matrix, string) (interface{}, error) {
+	return map[string]string{"status": "ok"}, nil
+}
+
 func TestValidateMatrix(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -63,5 +67,32 @@ func TestMatrixServiceProcessCallsAnalyzer(t *testing.T) {
 	}
 	if analysis == nil {
 		t.Fatal("Process() returned nil analysis")
+	}
+}
+
+func TestRotateClockwise(t *testing.T) {
+	input := Matrix{{1, 2, 3}, {4, 5, 6}}
+	want := Matrix{{4, 1}, {5, 2}, {6, 3}}
+	got := RotateClockwise(input)
+	if len(got) != len(want) || len(got[0]) != len(want[0]) {
+		t.Fatalf("RotateClockwise() dimensions = %dx%d, want %dx%d", len(got), len(got[0]), len(want), len(want[0]))
+	}
+	for row := range want {
+		for column := range want[row] {
+			if got[row][column] != want[row][column] {
+				t.Fatalf("RotateClockwise()[%d][%d] = %v, want %v", row, column, got[row][column], want[row][column])
+			}
+		}
+	}
+}
+
+func TestMatrixServiceRotateCallsAnalyzer(t *testing.T) {
+	service := NewMatrixService(analyzerStub{})
+	rotated, analysis, err := service.Rotate(context.Background(), Matrix{{1, 2}, {3, 4}}, "token")
+	if err != nil {
+		t.Fatalf("Rotate() error = %v", err)
+	}
+	if rotated[0][0] != 3 || rotated[1][1] != 2 || analysis == nil {
+		t.Fatalf("Rotate() returned rotated=%v, analysis=%v", rotated, analysis)
 	}
 }
