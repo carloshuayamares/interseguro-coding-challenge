@@ -1,41 +1,40 @@
 services:
-  service-go:
+  frontend:
     build:
-      context: ./go-matrix-service
-      dockerfile: Dockerfile
-    container_name: service-go
+      context: .
+      args:
+        VITE_GO_API_URL: http://localhost:3000
+        VITE_GO_API_PATH: /api/v1/matrix/qr
+    ports:
+      - "5173:80"
+    depends_on:
+      - go-api
+
+  go-api:
+    build:
+      context: ../go-matrix-service
     environment:
       PORT: "3000"
       JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
-      NODE_SERVICE_URL: "http://service-node:4000/api/v1/stats"
+      NODE_SERVICE_URL: "http://node-api:4000/api/v1/stats"
     ports:
       - "3000:3000"
-    networks:
-      - microservices-network
     depends_on:
-      service-node:
-        condition: service_healthy
+      - node-api
+    networks:
+      - app-network
 
-  service-node:
+  node-api:
     build:
-      context: ./node-stats-service
-      dockerfile: Dockerfile
-    container_name: service-node
+      context: ../node-stats-service
     environment:
       PORT: "4000"
       JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
     ports:
       - "4000:4000"
     networks:
-      - microservices-network
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:4000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      - app-network
 
 networks:
-  microservices-network:
+  app-network:
     driver: bridge
-    internal: true
