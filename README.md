@@ -17,7 +17,7 @@ Vue 3 -> Go/Fiber -> Node.js/Express
 1. Genera un secreto para la prueba y un JWT de 7 dias de expiracion. El secreto debe ser el mismo para Go y Node. En Windows PowerShell:
 
 ```powershell
-$env:JWT_SECRET = "local-challenge-secret"
+$env:JWT_SECRET = "interseguro-coding-challenge"
 Push-Location node-stats-service
 npm run token
 Pop-Location
@@ -28,7 +28,7 @@ Usa la ultima linea impresa por el comando como valor de `VITE_JWT_TOKEN`.
 2. Crea un archivo `.env` en la raiz con el mismo secreto y el token generado:
 
 ```dotenv
-JWT_SECRET=local-challenge-secret
+JWT_SECRET=interseguro-coding-challenge
 VITE_JWT_TOKEN=pega-aqui-el-token-generado
 ```
 

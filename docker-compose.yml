@@ -6,7 +6,7 @@ services:
       args:
         VITE_GO_API_URL: http://localhost:3000
         VITE_GO_API_PATH: /api/v1/matrix/qr
-        VITE_JWT_TOKEN: "${VITE_JWT_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2dWUtc2VydmljZSIsImlhdCI6MTc4ODUzMzM3Nn0.nNKts7ULIWN8G_ZrAleXD0RvZRLZvh9z1ebFa4JVQS0}"
+        VITE_JWT_TOKEN: "${VITE_JWT_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYXRyaXgtY2hhbGxlbmdlLWNsaWVudCIsImlhdCI6MTc4ODU0MjUwOSwiZXhwIjoxNzg5MTQ3MzA5fQ.MOBL6mSnLR4wPTZZQ0L0YmszXFSagxpjRgSZry4HKt8}"
     ports:
       - "5173:80"
     depends_on:
