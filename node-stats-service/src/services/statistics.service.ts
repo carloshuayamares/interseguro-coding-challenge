@@ -38,13 +38,15 @@ export function calculateStatistics(matrices: NumericMatrix[]): Statistics {
   const values = matrices.flat(2);
   const sum = values.reduce((total, value) => total + value, 0);
 
-  return {
+  const response: Statistics = {
     min: Math.min(...values),
     max: Math.max(...values),
     average: sum / values.length,
     sum,
     hasDiagonalMatrix: matrices.some(isDiagonalMatrix)
   };
+  console.log('Calculated statistics:', response);
+  return response;
 }
 
 export function isDiagonalMatrix(matrix: NumericMatrix): boolean {
