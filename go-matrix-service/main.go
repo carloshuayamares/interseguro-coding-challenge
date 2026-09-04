@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/interseguro/matrix-service/client"
 	"github.com/interseguro/matrix-service/handlers"
 	"github.com/interseguro/matrix-service/middleware"
@@ -23,8 +24,16 @@ func main() {
 	matrixHandler := handlers.NewMatrixHandler(matrixService)
 
 	app := fiber.New(fiber.Config{DisableStartupMessage: true})
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173,http://127.0.0.1:5173",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET,POST,OPTIONS",
+	}))
+	app.Options("/*", func(c *fiber.Ctx) error {
+		return c.SendStatus(http.StatusNoContent)
+	})
 	app.Use(middleware.JWT(jwtSecret))
-	app.Post("/api/v1/matrix/process", matrixHandler.Process)
+	app.Post("/api/v1/matrix/qr", matrixHandler.Process)
 	app.Post("/api/v1/matrix/rotate", matrixHandler.Rotate)
 
 	log.Printf("matrix service listening on :%s", port)

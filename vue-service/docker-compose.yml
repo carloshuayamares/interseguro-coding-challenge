@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_GO_API_URL: http://localhost:3000
+        VITE_GO_API_PATH: /api/v1/matrix/qr
+    ports:
+      - "5173:80"
+    depends_on:
+      - go-api
+
+  go-api:
+    build:
+      context: ../go-matrix-service
+    environment:
+      PORT: "3000"
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+      NODE_SERVICE_URL: "http://node-api:4000/api/v1/stats"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - node-api
+    networks:
+      - app-network
+
+  node-api:
+    build:
+      context: ../node-stats-service
+    environment:
+      PORT: "4000"
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

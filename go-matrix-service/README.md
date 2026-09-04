@@ -19,7 +19,7 @@ go run .
 ## Peticion
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/matrix/process \
+curl -X POST http://localhost:8080/api/v1/matrix/qr \
   -H "Authorization: Bearer <jwt>" \
   -H "Content-Type: application/json" \
   -d '[[1,2],[3,4]]'

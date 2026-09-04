@@ -1,0 +1,41 @@
+services:
+  service-go:
+    build:
+      context: ./go-matrix-service
+      dockerfile: Dockerfile
+    container_name: service-go
+    environment:
+      PORT: "3000"
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+      NODE_SERVICE_URL: "http://service-node:4000/api/v1/stats"
+    ports:
+      - "3000:3000"
+    networks:
+      - microservices-network
+    depends_on:
+      service-node:
+        condition: service_healthy
+
+  service-node:
+    build:
+      context: ./node-stats-service
+      dockerfile: Dockerfile
+    container_name: service-node
+    environment:
+      PORT: "4000"
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+    ports:
+      - "4000:4000"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  microservices-network:
+    driver: bridge
+    internal: true
