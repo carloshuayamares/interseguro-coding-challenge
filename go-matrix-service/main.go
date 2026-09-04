@@ -18,6 +18,7 @@ func main() {
 	port := getenv("PORT", "3000")
 	jwtSecret := getenv("JWT_SECRET", "change-me-in-production")
 	nodeServiceURL := getenv("NODE_SERVICE_URL", "http://localhost:3000/api/v1/stats")
+	allowedOrigins := getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,https://matrix-frontend-production.up.railway.app")
 
 	httpClient := &client.HTTPClient{Client: &http.Client{Timeout: 10 * time.Second}, URL: nodeServiceURL}
 	matrixService := services.NewMatrixService(httpClient)
@@ -25,7 +26,7 @@ func main() {
 
 	app := fiber.New(fiber.Config{DisableStartupMessage: true})
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173,http://127.0.0.1:5173",
+		AllowOrigins: allowedOrigins,
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET,POST,OPTIONS",
 	}))

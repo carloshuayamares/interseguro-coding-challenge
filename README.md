@@ -12,6 +12,16 @@ Vue 3 -> Go/Fiber -> Node.js/Express
 - `go-matrix-service`: valida la matriz, calcula la factorizacion QR y coordina la llamada a Node.
 - `node-stats-service`: calcula minimo, maximo, promedio, suma y detecta matrices diagonales.
 
+## Uso del frontend
+
+Abre el frontend en `http://localhost:5173` cuando ejecutes el proyecto localmente o en el dominio publico configurado para `vue-service` en Railway.
+
+1. Ingresa una matriz rectangular con valores numericos, por ejemplo `[[1, 2], [3, 4]]`.
+2. Ejecuta la operacion QR para obtener las matrices `Q` y `R`, o la operacion de rotacion para girar la matriz 90 grados.
+3. Revisa la matriz original, el resultado calculado y las estadisticas mostradas.
+
+Las estadisticas incluyen minimo, maximo, promedio, suma y si alguna matriz es diagonal. La matriz no puede estar vacia, tener filas de longitudes diferentes ni contener valores no numericos.
+
 ## Ejecutar con Docker
 
 1. Genera un secreto para la prueba y un JWT de 7 dias de expiracion. El secreto debe ser el mismo para Go y Node. En Windows PowerShell:
@@ -29,7 +39,7 @@ Usa la ultima linea impresa por el comando como valor de `VITE_JWT_TOKEN`.
 
 ```dotenv
 JWT_SECRET=interseguro-coding-challenge
-VITE_JWT_TOKEN=pega-aqui-el-token-generado
+VITE_JWT_TOKEN=aca-va-el-token-generado-por-npm-run-token-7-dias
 ```
 
 3. Levanta todos los servicios:
