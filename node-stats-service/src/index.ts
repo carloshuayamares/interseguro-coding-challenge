@@ -4,7 +4,7 @@ import { postStats } from './controllers/stats.controller';
 import { jwtMiddleware } from './middlewares/jwt.middleware';
 
 const app = express();
-const port = Number(process.env.PORT ?? 3000);
+const port = Number(process.env.PORT ?? 4000);
 const jwtSecret = process.env.JWT_SECRET ?? 'change-me-in-production';
 
 app.use(express.json({ limit: '1mb' }));

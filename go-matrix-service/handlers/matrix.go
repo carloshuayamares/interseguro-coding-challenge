@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,8 +18,6 @@ func NewMatrixHandler(service *services.MatrixService) *MatrixHandler {
 }
 
 func (h *MatrixHandler) Process(c *fiber.Ctx) error {
-	log.Printf("Received matrix: %s", c.Body())
-
 	var matrix services.Matrix
 	if err := json.Unmarshal(c.Body(), &matrix); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "invalid JSON body"})
@@ -34,14 +31,10 @@ func (h *MatrixHandler) Process(c *fiber.Ctx) error {
 		}
 		return c.Status(status).JSON(fiber.Map{"error": err.Error()})
 	}
-	log.Printf("Processed matrix: %s, result: %v, analysis: %v", c.Body(), result, analysis)
-
 	return c.JSON(fiber.Map{"q": result.Q, "r": result.R, "analysis": analysis})
 }
 
 func (h *MatrixHandler) Rotate(c *fiber.Ctx) error {
-	log.Printf("Received matrix for rotation: %s", c.Body())
-
 	var matrix services.Matrix
 	if err := json.Unmarshal(c.Body(), &matrix); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "invalid JSON body"})

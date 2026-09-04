@@ -6,8 +6,7 @@ interface StatsRequestBody {
 }
 
 export function postStats(request: Request, response: Response): void {
-  const { matrices } = request.body as StatsRequestBody;
-  console.log('Received matrices:', matrices);
+  const { matrices } = (request.body ?? {}) as StatsRequestBody;
 
   if (!validateMatrices(matrices)) {
     response.status(400).json({

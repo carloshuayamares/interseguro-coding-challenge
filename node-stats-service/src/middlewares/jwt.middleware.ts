@@ -12,7 +12,7 @@ export function jwtMiddleware(secret: string) {
     }
 
     try {
-      jwt.verify(token, secret);
+      jwt.verify(token, secret, { algorithms: ['HS256'] });
       next();
     } catch {
       response.status(401).json({ error: 'invalid bearer token' });

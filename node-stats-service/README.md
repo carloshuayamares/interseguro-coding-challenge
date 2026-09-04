@@ -4,7 +4,7 @@ Microservicio Express/TypeScript que valida matrices, calcula estadisticas agreg
 
 ## Variables de entorno
 
-- `PORT`: puerto HTTP, por defecto `3000`.
+- `PORT`: puerto HTTP, por defecto `4000`.
 - `JWT_SECRET`: secreto usado para validar el JWT HMAC.
 
 ## Ejecucion local

@@ -4,9 +4,9 @@ Microservicio REST en Go/Fiber para validar matrices, calcular su factorizacion 
 
 ## Configuracion
 
-- `PORT`: puerto HTTP, por defecto `8080`.
+- `PORT`: puerto HTTP, por defecto `3000`.
 - `JWT_SECRET`: secreto HMAC para validar tokens JWT.
-- `NODE_SERVICE_URL`: URL del endpoint Node.js, por defecto `http://node-service:3000/analyze`.
+- `NODE_SERVICE_URL`: URL del endpoint Node.js, por defecto `http://node-service:4000/analyze`.
 
 ## Ejecutar
 
@@ -19,7 +19,7 @@ go run .
 ## Peticion
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/matrix/qr \
+curl -X POST http://localhost:3000/api/v1/matrix/qr \
   -H "Authorization: Bearer <jwt>" \
   -H "Content-Type: application/json" \
   -d '[[1,2],[3,4]]'

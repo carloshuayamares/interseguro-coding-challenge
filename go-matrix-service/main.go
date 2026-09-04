@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	port := getenv("PORT", "8080")
+	port := getenv("PORT", "3000")
 	jwtSecret := getenv("JWT_SECRET", "change-me-in-production")
 	nodeServiceURL := getenv("NODE_SERVICE_URL", "http://localhost:3000/api/v1/stats")
 

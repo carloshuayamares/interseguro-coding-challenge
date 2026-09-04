@@ -37,15 +37,16 @@ export function calculateStatistics(matrices: NumericMatrix[]): Statistics {
 
   const values = matrices.flat(2);
   const sum = values.reduce((total, value) => total + value, 0);
+  const min = values.reduce((current, value) => Math.min(current, value), values[0]);
+  const max = values.reduce((current, value) => Math.max(current, value), values[0]);
 
   const response: Statistics = {
-    min: Math.min(...values),
-    max: Math.max(...values),
+    min,
+    max,
     average: sum / values.length,
     sum,
     hasDiagonalMatrix: matrices.some(isDiagonalMatrix)
   };
-  console.log('Calculated statistics:', response);
   return response;
 }
 
