@@ -1,18 +1,24 @@
 services:
   frontend:
     build:
-      context: .
+      context: ./vue-service
+      dockerfile: Dockerfile
       args:
         VITE_GO_API_URL: http://localhost:3000
         VITE_GO_API_PATH: /api/v1/matrix/qr
+        VITE_JWT_TOKEN: "${VITE_JWT_TOKEN:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2dWUtc2VydmljZSIsImlhdCI6MTc4ODUzMzM3Nn0.nNKts7ULIWN8G_ZrAleXD0RvZRLZvh9z1ebFa4JVQS0}"
     ports:
       - "5173:80"
     depends_on:
-      - go-api
+      go-api:
+        condition: service_started
+    networks:
+      - app-network
 
   go-api:
     build:
-      context: ../go-matrix-service
+      context: ./go-matrix-service
+      dockerfile: Dockerfile
     environment:
       PORT: "3000"
       JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
@@ -20,13 +26,15 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - node-api
+      node-api:
+        condition: service_healthy
     networks:
       - app-network
 
   node-api:
     build:
-      context: ../node-stats-service
+      context: ./node-stats-service
+      dockerfile: Dockerfile
     environment:
       PORT: "4000"
       JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
@@ -34,6 +42,12 @@ services:
       - "4000:4000"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 networks:
   app-network:
