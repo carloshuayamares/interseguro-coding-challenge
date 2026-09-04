@@ -1,3 +1,46 @@
 node_modules/
-dist/
+
+# Environment / secrets
 .env
+.env.*
+!.env.example
+
+# Build artifacts
+bin/
+dist/
+build/
+*.exe
+*.out
+*.test
+
+# Coverage
+coverage.out
+coverage.html
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+tmp/
+temp/
+
+# Private keys / certificates
+*.pem
+*.key
+*.p12
+*.jks
